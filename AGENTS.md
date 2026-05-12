@@ -62,4 +62,43 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
+## Project Context
+
+This repository is for an integration UI test project using JetBrains IDE Starter.
+
+Primary task source: [`docs/TASK_DESCRIPTION.md`](docs/TASK_DESCRIPTION.md).
+
+Starter reference docs copied into this repo:
+- [`docs/starter-docs/README.md`](docs/starter-docs/README.md) - overview of JetBrains IDE Starter, supported IDEs, commands, artifacts, metrics, and examples.
+- [`docs/starter-docs/STARTER_CORE.md`](docs/starter-docs/STARTER_CORE.md) - core Starter behavior, JUnit5 usage, command execution, debugging, DI overrides, IDE download configuration, VM options, and metrics.
+- [`docs/starter-docs/PerfTestWithDriver.kt`](docs/starter-docs/PerfTestWithDriver.kt) - Kotlin example using `Starter.newContext(...)`, `runIdeWithDriver()`, `useDriverAndCloseIde { ... }`, command execution, and driver/JMX calls.
+
+External references from the task:
+- JetBrains Starter library docs: https://github.com/JetBrains/intellij-community/blob/master/tools/intellij.tools.ide.starter/README.md
+- Example UI test with Driver: https://github.com/JetBrains/intellij-ide-starter/blob/master/intellij.tools.ide.starter.examples/testSrc/com/intellij/ide/starter/examples/driver/UiTestWithDriver.kt
+
+## Target Test Scenario
+
+Implement an integration UI test that:
+- Opens a JetBrains IDE. Any JetBrains IDE type is acceptable unless the user specifies one.
+- Uses any publicly available project as the test project.
+- Opens **Settings...**.
+- Navigates to **Version Control** > **Changelists**.
+- Selects the checkbox labeled **Create changelists automatically**.
+- Verifies that the checkbox is selected.
+- Clicks **OK**.
+
+Prefer Kotlin/JUnit5 patterns consistent with JetBrains IDE Starter examples. When interacting with the IDE, use Starter/Driver APIs and performance testing commands where appropriate instead of inventing unrelated automation layers.
+
+## Starter Notes For Agents
+
+- Starter launches the IDE as a separate process from the test runtime, so tests control the IDE through commands and Driver/JMX-style interactions.
+- Starter can download or use IDE installers, configure and launch the IDE, collect logs, metrics, freezes, exceptions, and test artifacts.
+- JUnit5 is supported through Starter integration libraries and extensions.
+- Driver calls do not always wait for IDE readiness automatically; use explicit waits such as `waitForIndicators(...)` when needed.
+- Command-chain examples include operations such as `openProject`, `waitForSmartMode`, `flushIndexes`, `openFile`, `pressKey`, and `searchEverywhere`; see the starter docs before adding custom commands.
+- If debugging a launched IDE process, use remote JVM debugging as described in [`docs/starter-docs/STARTER_CORE.md`](docs/starter-docs/STARTER_CORE.md).
+
+---
+
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
