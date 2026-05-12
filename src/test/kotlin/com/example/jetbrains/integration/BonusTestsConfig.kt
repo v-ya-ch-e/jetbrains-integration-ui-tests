@@ -10,11 +10,13 @@ internal object BonusTestsConfig {
   const val licenseKeyEnvironmentVariable = "LICENSE_KEY"
 
   const val editorSectionName = "Editor"
-  const val editorSettingsOverviewText = "Personalize source code appearance"
+  const val generalPageName = "General"
+  const val autoImportPageName = "Auto Import"
+  const val autoImportOnPasteDefaultValue = "Always"
+  const val autoImportOnPasteValue = "Ask"
   const val fontPageName = "Font"
-  const val fontPageVerificationText = "Enable ligatures"
-  const val colorSchemePageName = "Color Scheme"
-  const val colorSchemePageVerificationText = "Scheme:"
+  const val defaultFontSizeValue = "13.0"
+  const val fontSizeValue = "14.0"
 
   val ideStartupSettleDelay = 10.seconds
 
