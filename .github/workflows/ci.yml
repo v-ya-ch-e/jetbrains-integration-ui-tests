@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   test-classes:
-    name: Compile test classes
+    name: Compile all test classes
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -28,5 +28,5 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Compile Kotlin and test classes
+      - name: Compile all Kotlin test classes
         run: ./gradlew testClasses --no-daemon
