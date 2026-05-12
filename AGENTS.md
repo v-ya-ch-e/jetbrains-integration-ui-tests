@@ -90,6 +90,17 @@ Implement an integration UI test that:
 
 Prefer Kotlin/JUnit5 patterns consistent with JetBrains IDE Starter examples. When interacting with the IDE, use Starter/Driver APIs and performance testing commands where appropriate instead of inventing unrelated automation layers.
 
+## Bonus Test Scenarios
+
+Keep test configuration separated by test class: [`src/test/kotlin/com/example/jetbrains/integration/ChangelistsSettingsConfig.kt`](src/test/kotlin/com/example/jetbrains/integration/ChangelistsSettingsConfig.kt) belongs to the main Changelists test, and [`src/test/kotlin/com/example/jetbrains/integration/BonusTestsConfig.kt`](src/test/kotlin/com/example/jetbrains/integration/BonusTestsConfig.kt) belongs to the bonus Settings tests.
+
+[`src/test/kotlin/com/example/jetbrains/integration/BonusTests.kt`](src/test/kotlin/com/example/jetbrains/integration/BonusTests.kt) contains additional IDEA Ultimate Settings UI checks. Keep them focused on stable Settings navigation/rendering unless the user requests state-changing scenarios:
+- **Editor**
+- **Editor** > **Font**
+- **Editor** > **Color Scheme**
+
+CI is split by weight: [`ci.yml`](.github/workflows/ci.yml) compiles all test classes, [`ui-test.yml`](.github/workflows/ui-test.yml) runs the main Changelists UI test manually, and [`bonus-ui-tests.yml`](.github/workflows/bonus-ui-tests.yml) runs the bonus UI tests manually.
+
 ## Starter Notes For Agents
 
 - Starter launches the IDE as a separate process from the test runtime, so tests control the IDE through commands and Driver/JMX-style interactions.
