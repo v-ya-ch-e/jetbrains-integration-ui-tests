@@ -6,7 +6,7 @@ import com.intellij.ide.starter.project.GitHubProject
 import kotlin.time.Duration.Companion.seconds
 
 internal object ChangelistsSettingsConfig {
-  const val useDockerContainer = true
+  const val useDockerContainer = false
   const val licenseKeyEnvironmentVariable = "LICENSE_KEY"
   const val versionControlSectionName = "Version Control"
   const val changelistsPageName = "Changelists"
