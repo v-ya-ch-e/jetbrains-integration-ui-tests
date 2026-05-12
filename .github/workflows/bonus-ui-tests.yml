@@ -1,4 +1,4 @@
-name: Manual Main IDE UI Test
+name: Manual Bonus IDE UI Tests
 
 on:
   workflow_dispatch:
@@ -7,10 +7,10 @@ permissions:
   contents: read
 
 jobs:
-  changelists-settings:
-    name: Run Changelists settings UI test
+  bonus-settings:
+    name: Run bonus Settings UI tests
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     env:
       LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
@@ -33,14 +33,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb
 
-      - name: Run main IDE UI test
-        run: xvfb-run -a ./gradlew test --tests com.example.jetbrains.integration.ChangelistsSettingsTest --rerun-tasks --no-daemon
+      - name: Run bonus IDE UI tests
+        run: xvfb-run -a ./gradlew test --tests com.example.jetbrains.integration.BonusTests --rerun-tasks --no-daemon
 
       - name: Upload test and Starter artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: main-ide-ui-test-artifacts
+          name: bonus-ide-ui-test-artifacts
           if-no-files-found: ignore
           path: |
             build/reports/tests/test/
