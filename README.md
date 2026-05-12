@@ -6,7 +6,7 @@ Kotlin/JUnit 5 project that demonstrates JetBrains IDE Starter integration UI te
 
 The test opens IntelliJ IDEA Ultimate with a pinned public Gradle project (`jitpack/gradle-simple` at commit `abbeb794eb3ae7d9926f5bd7de58477abcbaa906`), navigates to **Settings...** > **Version Control** > **Changelists**, enables **Create changelists automatically**, verifies the checkbox is selected, and confirms the dialog with **OK**.
 
-The bonus tests use their own IDEA Ultimate launch configuration and verify that additional Settings pages from **Editor** render correctly: **Editor**, **Editor** > **Font**, and **Editor** > **Color Scheme**.
+The bonus tests use their own IDEA Ultimate launch configuration and exercise additional **Editor** Settings pages by changing values and verifying the UI state afterwards.
 
 See [`docs/TASK_DESCRIPTION.md`](docs/TASK_DESCRIPTION.md) for the original task and [`docs/starter-docs/`](docs/starter-docs/) for the copied Starter reference notes used while implementing it.
 
@@ -38,6 +38,13 @@ This repository uses three GitHub Actions workflows:
 
 The full UI tests are intentionally not required pull request gates because they download and start a full IDE, need a desktop-like environment, can require an IntelliJ IDEA Ultimate license, and depend on moving EAP snapshot artifacts.
 
+## Bonus UI Tests
+
+[`BonusTests.kt`](src/test/kotlin/com/example/jetbrains/integration/BonusTests.kt) contains two additional Settings scenarios:
+
+- `changesAutoImportOnPasteToAsk` opens **Editor** > **General** > **Auto Import**, changes **Insert imports on paste** from `Always` to `Ask`, and verifies the combo box selected value.
+- `changesEditorFontSize` opens **Editor** > **Font**, changes the editor font size to `14.0`, and verifies the size field value.
+
 ### Full UI Test Evidence
 
 The manual workflow has been run successfully in GitHub Actions: [Run Changelists settings UI test](https://github.com/v-ya-ch-e/jetbrains-integration-ui-tests/actions/runs/25748055373). The job log shows that GitHub Actions executed:
@@ -64,6 +71,8 @@ Compile the project and test classes:
 ```shell
 ./gradlew testClasses
 ```
+
+Running UI tests for the first time, can take time until the specified version of IDEA is downloaded.
 
 Run the integration UI test:
 
