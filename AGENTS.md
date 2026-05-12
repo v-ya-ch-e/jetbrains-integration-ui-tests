@@ -99,6 +99,21 @@ Prefer Kotlin/JUnit5 patterns consistent with JetBrains IDE Starter examples. Wh
 - Command-chain examples include operations such as `openProject`, `waitForSmartMode`, `flushIndexes`, `openFile`, `pressKey`, and `searchEverywhere`; see the starter docs before adding custom commands.
 - If debugging a launched IDE process, use remote JVM debugging as described in [`docs/starter-docs/STARTER_CORE.md`](docs/starter-docs/STARTER_CORE.md).
 
+## Findings From Local Starter/Driver Runs
+
+- With current `LATEST-EAP-SNAPSHOT` Starter/Driver dependencies, test compilation requires a Java 25 test runtime; Java 21 fails on class file version 69 from Starter JUnit5 classes.
+- `IdeProductProvider` was not available in the resolved Starter API. For IntelliJ IDEA Community, direct `IdeInfo(productCode = "IC", platformPrefix = "Idea", executableFileName = "idea", fullName = "IntelliJ IDEA Community")` compiled.
+- The latest resolved IntelliJ IDEA Community EAP (`IC-252.28539.54` during this run) starts locally, but `runIdeWithDriver().useDriverAndCloseIde { ... }` fails before UI actions because Starter/Driver tries to call `com.jetbrains.performancePlugin.TestContext`, which is missing from the bundled Performance Testing plugin.
+- `ConfigurationStorage.useDockerContainer(true)` sets `USE_DOCKER_CONTAINER=true`, but it did not prevent the `TestNameSynchronizer` call to the missing `TestContext` class. Do not treat it as a complete workaround for that failure.
+- A working local workaround is to call `runIdeWithDriver()`, then create a plain `DriverImpl(JmxHost(address = "127.0.0.1:7777"), isRemDevMode = false)` and close the IDE manually in `finally`.
+- In this dependency/build combination, `waitForIndicators(...)` failed inside Driver with a `kotlin.Pair.getFirst()` argument mismatch. Avoid it unless the Starter/Driver/IDE versions are changed and reverified.
+- `driver.invokeAction("ShowSettings")` was rejected by the IDE in the working run. `IdeaFrameUI.openSettingsDialog()` opened Settings reliably.
+- Driver connection does not mean the IDE UI is ready. A simple short startup wait after `driver.isConnected` made the Settings tree navigation stable in this project.
+- Navigating `Settings...` > `Version Control` > `Changelists` through `openTreeSettingsSection("Version Control", "Changelists")` worked after the startup wait.
+- The Settings search field was not reliable in this IDE build because the Driver helper could not find a text field with accessible name `Search`; prefer tree navigation for this scenario.
+- The changelist checkbox setting was not found through a stable public Driver service API. Unless a reliable API is confirmed, keep the assertion UI-level and treat the selected Settings checkbox as the source of truth.
+- Generated outputs from local runs include `.gradle/`, `build/`, `out/`, and `allure-results/`; keep them gitignored.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
