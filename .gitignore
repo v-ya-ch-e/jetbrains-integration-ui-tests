@@ -7,6 +7,7 @@ build/
 # Test reports
 allure-results/
 allure-report/
+test-output/
 
 # Kotlin
 *.class
@@ -20,9 +21,21 @@ allure-report/
 *.ipr
 *.iws
 out/
+.run/
 
-# Local configuration file (sdk man, etc)
+# JetBrains IDE Starter / Driver local artifacts
+captures/
+*.hprof
+*.jfr
+hs_err_pid*
+replay_pid*
+
+# Local configuration and environment files
 local.properties
+.env
+.env.*
+!.env.example
+*.log
 
 # macOS
 .DS_Store
