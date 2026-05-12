@@ -24,7 +24,7 @@ See [`docs/TASK_DESCRIPTION.md`](docs/TASK_DESCRIPTION.md) for the original task
 - JetBrains IDE Starter and Driver snapshots
 - IntelliJ IDEA Ultimate launched by Starter as the IDE under test
 
-## CI
+## GitHub Actions CI
 
 This repository uses two GitHub Actions workflows:
 
@@ -32,6 +32,18 @@ This repository uses two GitHub Actions workflows:
 - [`ui-test.yml`](.github/workflows/ui-test.yml) is a manual `workflow_dispatch` workflow for the full IDE UI scenario. It runs the test under Xvfb, reads `LICENSE_KEY` from GitHub Secrets, and uploads test/Starter artifacts for debugging.
 
 The full UI test is intentionally not a required pull request gate because it downloads and starts a full IDE, needs a desktop-like environment, can require an IntelliJ IDEA Ultimate license, and depends on moving EAP snapshot artifacts.
+
+### Full UI Test Evidence
+
+The manual workflow has been run successfully in GitHub Actions: [Run Changelists settings UI test](https://github.com/v-ya-ch-e/jetbrains-integration-ui-tests/actions/runs/25748055373). The job log shows that GitHub Actions executed:
+
+```shell
+xvfb-run -a ./gradlew test --tests com.example.jetbrains.integration.ChangelistsSettingsTest --rerun-tasks --no-daemon
+```
+
+The same log contains `ChangelistsSettingsTest > enablesAutomaticChangelistCreation() PASSED` and `BUILD SUCCESSFUL in 4m 48s`, confirming that the full IDE UI test was performed on the runner.
+
+![GitHub Actions full UI test run](docs/assets/github-actions-ui-test-run.png)
 
 ## Prerequisites
 
@@ -65,6 +77,7 @@ The project uses JetBrains Starter and Driver `LATEST-EAP-SNAPSHOT` dependencies
 - `src/test/kotlin/com/example/jetbrains/integration/ChangelistsSettingsTest.kt` contains the integration UI test.
 - `src/test/kotlin/com/example/jetbrains/integration/ChangelistsSettingsConfig.kt` contains the IDE, project, and UI labels used by the test.
 - `docs/` contains the task description and local copies of Starter reference material.
+- `docs/assets/` contains README images, including the GitHub Actions UI test screenshot.
 - `AGENTS.md` and `CLAUDE.md` contain repository guidance for automated coding assistants and are not required to run the test.
 
 ## License
